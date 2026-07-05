@@ -1,6 +1,26 @@
 # Marketplace MVP — Daily Phase Plan
 
-This plan turns the **Marketplace Platform MVP** spec into **5 phases / ~15 working days**, each with a clear end-of-day deliverable. The repo starts from zero — Phase 1 is the foundation.
+This plan turns the **Marketplace Platform MVP** spec into **5 phases / ~15 working days**, each with a clear end-of-day deliverable.
+
+## Current status
+
+**Phase 1 — Foundation** (in progress)
+
+| Day | Status | Notes |
+| --- | --- | --- |
+| 1 — Monorepo scaffold | ✅ Done | pnpm workspaces, Turborepo, `@servicio/shared`, ESLint/Prettier, Node 26 |
+| 2 — Backend shell | ✅ Done | Fastify on port 3000, `/health`, module route prefixes, error handler |
+| 3 — Database layer | ⏳ Next | Drizzle + local Postgres (no Docker) |
+
+**Quick verify (current):**
+
+```bash
+pnpm install && pnpm build
+pnpm dev:api
+curl http://localhost:3000/health   # {"status":"ok"}
+```
+
+**Not yet built:** database connection, auth, mobile app, business routes.
 
 ## Guiding constraint
 
@@ -56,8 +76,12 @@ packages/
 
 **Suggested tooling** (not in spec, but standard for this shape):
 
-- Package manager: **pnpm workspaces**
-- Task runner: **Turborepo** (optional but helps parallel `dev`/`build`)
+- Package manager: **pnpm workspaces** ✅
+- Task runner: **Turborepo** ✅
+- Lint/format: **ESLint + Prettier** ✅
+- Node: **v26** (pinned in `.nvmrc`) ✅
+- Package scope: **`@servicio/*`** ✅
+- Local Postgres: **Homebrew or Postgres.app** — no Docker for now ✅
 
 No test runner setup in early phases — skip Vitest/Jest/Detox scaffolding until post-MVP.
 
@@ -67,7 +91,7 @@ No test runner setup in early phases — skip Vitest/Jest/Detox scaffolding unti
 
 Goal: runnable monorepo, backend shell, database pipeline. No business features yet.
 
-### Day 1 — Monorepo scaffold
+### Day 1 — Monorepo scaffold ✅
 
 - Initialize pnpm workspace at repo root
 - Create `packages/shared` with TypeScript, Zod, and shared path exports
@@ -77,21 +101,34 @@ Goal: runnable monorepo, backend shell, database pipeline. No business features 
 
 **Done when:** `pnpm install` succeeds and `packages/shared` compiles.
 
-### Day 2 — Backend shell
+**Completed:** all items above. Placeholder `healthCheckSchema` in shared proves Zod wiring.
+
+### Day 2 — Backend shell ✅
 
 - Fastify app with modular folder structure matching spec modules: `auth`, `users`, `jobs`, `pros`, `leads`, `quotes`, `bookings`, `messaging`, `reviews`
 - Health route (`GET /health`)
 - Global error handler, request logging, env config (`.env.example`)
 - Register route prefixes per module (empty handlers OK)
 
-**Done when:** `pnpm --filter api dev` starts and `/health` returns 200.
+**Done when:** `pnpm dev:api` starts and `/health` returns 200.
 
-### Day 3 — Database layer
+**Completed:** all items above. API structure:
+
+```
+apps/api/src/
+  app.ts, server.ts
+  config/env.ts
+  plugins/error-handler.ts
+  routes/health.ts
+  modules/{auth,users,jobs,pros,leads,quotes,bookings,messaging,reviews}/routes.ts
+```
+
+### Day 3 — Database layer ⏳
 
 - PostgreSQL connection via Drizzle
 - Migration workflow (`drizzle-kit generate` / `migrate`)
 - Base `users` table stub + migration pipeline proven end-to-end
-- Optional: Docker Compose for local Postgres
+- Local Postgres only (Homebrew or Postgres.app — **no Docker**)
 
 **Done when:** API starts, connects to DB, and first migration applies cleanly.
 
@@ -274,14 +311,18 @@ Fix gaps, add minimal error states (empty lists, unauthorized, expired jobs), do
 
 These aren't spelled out in the spec but will block daily progress if deferred:
 
-| Decision | MVP recommendation |
-| --- | --- |
-| App structure | **Single Expo app** with role-based navigation (customer vs pro tabs after login) |
-| Location matching | City or ZIP string equality / prefix — no geospatial queries |
-| Quote acceptance | One accepted quote per job; auto-reject others |
-| Service completion | Pro marks complete → customer can review |
-| Messaging | REST + polling, no WebSockets |
-| Auth | JWT access token only; short-ish expiry + re-login acceptable for MVP |
+| Decision | MVP recommendation | Status |
+| --- | --- | --- |
+| Monorepo tooling | pnpm + Turborepo + ESLint/Prettier | ✅ Locked |
+| Node version | v26 | ✅ Locked |
+| Package scope | `@servicio/*` | ✅ Locked |
+| Local database | Homebrew/Postgres.app, no Docker | ✅ Locked |
+| App structure | **Single Expo app** with role-based navigation (customer vs pro tabs after login) | Pending |
+| Location matching | City or ZIP string equality / prefix — no geospatial queries | Pending |
+| Quote acceptance | One accepted quote per job; auto-reject others | Pending |
+| Service completion | Pro marks complete → customer can review | Pending |
+| Messaging | REST + polling, no WebSockets | Pending |
+| Auth | JWT access token only; short-ish expiry + re-login acceptable for MVP | Pending |
 
 ---
 

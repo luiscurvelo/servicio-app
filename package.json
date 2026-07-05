@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "turbo dev",
+    "dev:api": "pnpm --filter @servicio/api dev",
     "build": "turbo build",
     "lint": "eslint .",
     "typecheck": "turbo typecheck",

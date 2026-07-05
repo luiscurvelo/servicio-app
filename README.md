@@ -2,6 +2,16 @@
 
 Local services marketplace (customers post jobs, pros quote, bookings, messaging, reviews).
 
+## Current status
+
+| Phase | Day | Status |
+| --- | --- | --- |
+| 1 — Foundation | 1 Monorepo scaffold | ✅ Done |
+| 1 — Foundation | 2 Backend shell | ✅ Done |
+| 1 — Foundation | 3 Database layer | ⏳ Next |
+
+See [docs/MVP-DAILY-PHASES.md](./docs/MVP-DAILY-PHASES.md) for the full plan.
+
 ## Prerequisites
 
 - **Node.js 26** — use [nvm](https://github.com/nvm-sh/nvm): `nvm install` (reads `.nvmrc`)
@@ -35,12 +45,29 @@ pnpm typecheck
 pnpm lint
 ```
 
+### API dev server
+
+```bash
+cp apps/api/.env.example apps/api/.env   # optional — defaults work
+pnpm dev:api
+```
+
+Server runs at **http://localhost:3000**. Health check:
+
+```bash
+curl http://localhost:3000/health
+# {"status":"ok"}
+```
+
 ## Monorepo layout
 
 ```
 apps/
-  api/          # Fastify + Drizzle (Phase 1 Day 2+)
-  mobile/       # Expo + Expo Router (Phase 2 Day 6+)
+  api/          # Fastify API (Day 2 ✅ — Drizzle in Day 3)
+    src/
+      modules/  # auth, users, jobs, pros, leads, quotes, bookings, messaging, reviews
+      routes/   # /health
+  mobile/       # Expo placeholder (Phase 2 Day 6+)
 packages/
   shared/       # Zod schemas, types, enums
 ```
@@ -49,7 +76,8 @@ packages/
 
 | Command | Description |
 | --- | --- |
-| `pnpm dev` | Run dev servers (via Turborepo) |
+| `pnpm dev` | Run all dev tasks via Turborepo (api + mobile placeholder) |
+| `pnpm dev:api` | Start API dev server on port 3000 |
 | `pnpm build` | Build all packages |
 | `pnpm typecheck` | Type-check all packages |
 | `pnpm lint` | ESLint all packages |
