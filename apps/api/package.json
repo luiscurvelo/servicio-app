@@ -1,0 +1,14 @@
+{
+  "name": "@servicio/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "echo \"API dev server starts in Phase 1 Day 2\""
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@servicio/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev": "echo \"Expo dev server starts in Phase 2 Day 6\""
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
